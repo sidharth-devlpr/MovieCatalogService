@@ -2,7 +2,8 @@ package com.sidharthdevlpr.moviecatalogservice.controller;
 
 import com.sidharthdevlpr.moviecatalogservice.domain.CatalogItem;
 import com.sidharthdevlpr.moviecatalogservice.domain.Movie;
-import com.sidharthdevlpr.moviecatalogservice.domain.Rating;
+import com.sidharthdevlpr.moviecatalogservice.domain.UserRating;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,13 +27,14 @@ public class MovieCatalogController {
         /*Using RestTemplate for the connection of 2 microservices*/
 
 
+        UserRating ratingList = restTemplate.getForObject("http://localhost:8084/ratingsdata/101", UserRating.class);
 
-       List<Rating> ratings = Arrays.asList(
+       /*List<Rating> ratings = Arrays.asList(
                new Rating("101",4),
                new Rating("102",3)
-       );
+       );*/
 
-       return ratings.stream().map(rating -> {
+       return ratingList.getUserRating().stream().map(rating -> {
            Movie movie = restTemplate.getForObject("http://localhost:8083/movies/"+rating.getMovieId(), Movie.class);
 
            /*Movie movie = webclientBuilder.build()
