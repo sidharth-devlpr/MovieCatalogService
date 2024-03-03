@@ -27,7 +27,7 @@ public class MovieCatalogController {
         /*Using RestTemplate for the connection of 2 microservices*/
 
 
-        UserRating ratingList = restTemplate.getForObject("http://localhost:8084/ratingsdata/101", UserRating.class);
+        UserRating ratingList = restTemplate.getForObject("http://Ratings-data-service/ratingsdata/101", UserRating.class);
 
        /*List<Rating> ratings = Arrays.asList(
                new Rating("101",4),
@@ -35,7 +35,7 @@ public class MovieCatalogController {
        );*/
 
        return ratingList.getUserRating().stream().map(rating -> {
-           Movie movie = restTemplate.getForObject("http://localhost:8083/movies/"+rating.getMovieId(), Movie.class);
+           Movie movie = restTemplate.getForObject("http://Movie-info-service/movies/"+rating.getMovieId(), Movie.class);
 
            /*Movie movie = webclientBuilder.build()
                    .get()
