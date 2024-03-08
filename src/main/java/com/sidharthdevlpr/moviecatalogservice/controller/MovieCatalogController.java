@@ -3,6 +3,7 @@ package com.sidharthdevlpr.moviecatalogservice.controller;
 import com.sidharthdevlpr.moviecatalogservice.domain.CatalogItem;
 import com.sidharthdevlpr.moviecatalogservice.domain.Movie;
 import com.sidharthdevlpr.moviecatalogservice.domain.UserRating;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,7 @@ public class MovieCatalogController {
 
 //    Returns a list of movies that a particular user has seen
     @GetMapping("/{userId}")
+    @CircuitBreaker(name = "getCatalogCircuitBreaker", fallbackMethod = "getFallBackCatalogItem")
     public List<CatalogItem> getCatalog(@PathVariable String userId){
         /*Using RestTemplate for the connection of 2 microservices*/
 
@@ -49,7 +51,7 @@ public class MovieCatalogController {
                    .bodyToMono(Movie.class)
                    .block();
            */
-    /*public List<CatalogItem> getFallBackCatalogItem(@PathVariable String userId){
+    public List<CatalogItem> getFallBackCatalogItem(@PathVariable String userId, Throwable throwable){
         return Arrays.asList(new CatalogItem("","",0));
-    }*/
+    }
 }
