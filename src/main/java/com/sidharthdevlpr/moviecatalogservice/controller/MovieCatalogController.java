@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+//tells the springboot that here we handle the http request and response
 public class MovieCatalogController {
 
     @Autowired
